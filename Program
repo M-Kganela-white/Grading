@@ -1,0 +1,173 @@
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.grades = {
+            'Math': [],
+            'English': [],
+            'Science': [],
+            'PE': []
+        }
+   
+    def add_grades(self, grades):
+        for subject, grade in grades.items():
+            self.grades[subject].append(grade)
+   
+    def update_grades(self, grades):
+        for subject, grade in grades.items():
+            self.grades[subject] = [grade]
+   
+    def average_grade(self):
+        all_grades = [grade for grades in self.grades.values() for grade in grades]
+        return sum(all_grades) / len(all_grades) if all_grades else 0
+   
+    def __str__(self):
+        return f"{self.name}'s grades: {self.grades} | Average Grade: {self.average_grade():.2f}"
+
+class Gradebook:
+    def __init__(self):
+        self.students = {}
+   
+    def add_student(self, name, grades):
+        if name not in self.students:
+            student = Student(name)  # Ensure Student class is recognized here
+            student.add_grades(grades)
+            self.students[name] = student
+            print(f"Student {name} added.")
+        else:
+            print(f"Student {name} already exists.")
+   
+    def update_student(self, name, grades):
+        if name in self.students:
+            self.students[name].update_grades(grades)
+            print(f"Grades for {name} updated.")
+        else:
+            print("Student not found.")
+   
+    def remove_student(self, name):
+        if name in self.students:
+            del self.students[name]
+            print(f"Student {name} deleted.")
+        else:
+            print("Student not found.")
+   
+    def view_student(self, name):
+        if name in self.students:
+            print(self.students[name])
+        else:
+            print("Student not found.")
+   
+    def display_all_students(self):
+        print("\nStudents and Grades")
+        for student in self.students.values():
+            print(student)
+   
+    def view_grades_per_subject(self, subject):
+        if subject in ['Math', 'English', 'Science', 'PE']:
+            print(f"\nGrades for {subject}:")
+            for student in self.students.values():
+                print(f"{student.name}: {student.grades[subject]}")
+        else:
+            print("Invalid subject.")
+   
+    def overall_average(self):
+        all_grades = [grade for student in self.students.values() for grades in student.grades.values() for grade in grades]
+        return sum(all_grades) / len(all_grades) if all_grades else 0
+   
+    def highlow_grade(self):
+        print("\nHighest and Lowest Grades per Subject")
+        subjects = ['Math', 'English', 'Science', 'PE']
+        for subject in subjects:
+            subject_grades = [grade for student in self.students.values() for grade in student.grades[subject]]
+            if subject_grades:
+                print(f"{subject}: Highest {max(subject_grades)} | Lowest {min(subject_grades)}")
+            else:
+                print(f"{subject}: No grades available.")
+               
+    def sort_students(self, by='name'):
+        if by == 'name':
+            sorted_students = sorted(self.students.values(), key=lambda student: student.name)
+        elif by == 'average':
+            sorted_students = sorted(self.students.values(), key=lambda student: student.average_grade(), reverse=True)
+        else:
+            print("invalid sort criteria.")
+            return
+        print("\nSorted students: ")
+        for student in sorted_students:
+            print(student)
+GB = Gradebook()
+
+while True:
+    print("1. Add New Student")
+    print("2. Update Existing Student")
+    print("3. Remove Student")
+    print("4. View All Students and Grades")
+    print("5. View Grades for a Specific Subject")
+    print("6. View Student Grades")
+    print("7. Sort Students")
+    print("8. Exit")
+   
+   
+    choice = int(input("Enter your choice from 1 to 7: "))
+   
+   
+   
+    if choice == 1:
+        num_students = int(input("How many students do you want to add? "))
+       
+        for i in range(num_students):
+            name = input(f"Enter name for student {i + 1}: ")
+            grades = {}
+            for subject in ['Math', 'English', 'Science', 'PE']:
+                while True:
+                    try:
+                        grade = int(input(f"Enter student's {subject} grade: "))
+                        if 0 <= grade <= 100:
+                            grades[subject] = grade
+                            break
+                        else:
+                            print("Invalid grade.")
+                    except ValueError:
+                        print("Invalid input.")
+            GB.add_student(name, grades)
+   
+   
+    elif choice == 2:
+        name = input("Enter student's name to update: ")
+        grades = {}
+        for subject in ['Math', 'English', 'Science', 'PE']:
+            while True:
+                try:
+                    grade = int(input(f"Enter new {subject} grade for {name}: "))
+                    if 0 <= grade <= 100:
+                        grades[subject] = grade
+                        break
+                    else:
+                        print("Invalid grade.")
+                except ValueError:
+                    print("Invalid input.")
+        GB.update_student(name, grades)
+   
+    elif choice == 3:
+        name = input("Enter student's name to delete: ")
+        GB.remove_student(name)
+   
+    elif choice == 4:
+        GB.display_all_students()
+   
+    elif choice == 5:
+        subject = input("Enter the subject (Math, English, Science, or PE): ")
+        GB.view_grades_per_subject(subject)
+   
+    elif choice == 6:
+        name = input("Enter student's name to view grades: ")
+        GB.view_student(name)
+   
+    elif choice == 7:
+        sort_criteria = input("sort students by 'name' or 'average': ")
+        GB.sort_students(by=sort_criteria)
+   
+    elif choice == 8:
+        break
+   
+    else:
+        print("Invalid choice.\n")
