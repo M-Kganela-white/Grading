@@ -1,4 +1,4 @@
-class Student:
+class Student: #Craeting Student class
     def __init__(self, name):
         self.name = name
         self.grades = {
@@ -8,7 +8,7 @@ class Student:
             'PE': []
         }
    
-    def add_grades(self, grades):
+    def add_grades(self, grades): 
         for subject, grade in grades.items():
             self.grades[subject].append(grade)
    
@@ -23,11 +23,11 @@ class Student:
     def __str__(self):
         return f"{self.name}'s grades: {self.grades} | Average Grade: {self.average_grade():.2f}"
 
-class Gradebook:
+class Gradebook: #Creating Gradebook class
     def __init__(self):
         self.students = {}
    
-    def add_student(self, name, grades):
+    def add_student(self, name, grades): #Method to add student grades
         if name not in self.students:
             student = Student(name)  # Ensure Student class is recognized here
             student.add_grades(grades)
@@ -36,44 +36,44 @@ class Gradebook:
         else:
             print(f"Student {name} already exists.")
    
-    def update_student(self, name, grades):
+    def update_student(self, name, grades): #Method used to update student records
         if name in self.students:
             self.students[name].update_grades(grades)
             print(f"Grades for {name} updated.")
         else:
             print("Student not found.")
    
-    def remove_student(self, name):
+    def remove_student(self, name): #Method usd to remove student records
         if name in self.students:
             del self.students[name]
             print(f"Student {name} deleted.")
         else:
             print("Student not found.")
    
-    def view_student(self, name):
+    def view_student(self, name): #Method used to view student records
         if name in self.students:
             print(self.students[name])
         else:
             print("Student not found.")
    
-    def display_all_students(self):
+    def display_all_students(self): #Method used to display all student records
         print("\nStudents and Grades")
         for student in self.students.values():
             print(student)
    
-    def view_grades_per_subject(self, subject):
+    def view_grades_per_subject(self, subject): #MEthod used to view student grades per subject
         if subject in ['Math', 'English', 'Science', 'PE']:
             print(f"\nGrades for {subject}:")
             for student in self.students.values():
                 print(f"{student.name}: {student.grades[subject]}")
         else:
-            print("Invalid subject.")
+            print("Invalid subject.") #Validation error message 
    
-    def overall_average(self):
+    def overall_average(self): #Function used to view overall grades
         all_grades = [grade for student in self.students.values() for grades in student.grades.values() for grade in grades]
         return sum(all_grades) / len(all_grades) if all_grades else 0
    
-    def highlow_grade(self):
+    def highlow_grade(self): #Function to filter highest and lowest grade
         print("\nHighest and Lowest Grades per Subject")
         subjects = ['Math', 'English', 'Science', 'PE']
         for subject in subjects:
@@ -83,20 +83,20 @@ class Gradebook:
             else:
                 print(f"{subject}: No grades available.")
                
-    def sort_students(self, by='name'):
+    def sort_students(self, by='name'): #Function used to sort student by naame or average
         if by == 'name':
             sorted_students = sorted(self.students.values(), key=lambda student: student.name)
         elif by == 'average':
             sorted_students = sorted(self.students.values(), key=lambda student: student.average_grade(), reverse=True)
         else:
-            print("invalid sort criteria.")
+            print("invalid sort criteria.") #Validation error message 
             return
         print("\nSorted students: ")
         for student in sorted_students:
             print(student)
-GB = Gradebook()
+GB = Gradebook() #Simplifying the Gradebook class
 
-while True:
+while True: #Loop displaying a user menu where the user can select specific options
     print("1. Add New Student")
     print("2. Update Existing Student")
     print("3. Remove Student")
@@ -107,11 +107,11 @@ while True:
     print("8. Exit")
    
    
-    choice = int(input("Enter your choice from 1 to 7: "))
+    choice = int(input("Enter your choice from 1 to 7: ")) #Input for user menu
    
    
    
-    if choice == 1:
+    if choice == 1: #If statements used for the menu depending on the option selected
         num_students = int(input("How many students do you want to add? "))
        
         for i in range(num_students):
@@ -147,7 +147,7 @@ while True:
                     print("Invalid input.")
         GB.update_student(name, grades)
    
-    elif choice == 3:
+    elif choice == 3: #If statement used to display options seleceted 
         name = input("Enter student's name to delete: ")
         GB.remove_student(name)
    
